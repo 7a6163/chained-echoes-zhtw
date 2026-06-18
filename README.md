@@ -52,6 +52,21 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Locating the game files
+
+In Steam, right-click **Chained Echoes → Manage → Browse local files**, then find
+the `StreamingAssets` folder. The two files you need:
+
+**Database** — `bansheegz_database.bytes`
+
+- macOS: `Chained Echoes.app/Contents/Resources/Data/StreamingAssets/bansheegz_database.bytes`
+- Windows: `Chained Echoes_Data/StreamingAssets/bansheegz_database.bytes`
+
+**Dialogue bundle** — `packedassets_assets_all.bundle` (inside the platform `aa` subfolder)
+
+- macOS: `…/StreamingAssets/aa/StandaloneOSX/packedassets_assets_all.bundle`
+- Windows: `…/StreamingAssets/aa/StandaloneWindows64/packedassets_assets_all.bundle`
+
 ## Usage
 
 Always back up your files first.

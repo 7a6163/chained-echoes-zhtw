@@ -1,0 +1,3 @@
+# convert_bundle.py needs UnityPy to read/repack the asset bundle.
+# bgdb.py and convert_zh.py use only the Python standard library.
+UnityPy>=1.25,<2

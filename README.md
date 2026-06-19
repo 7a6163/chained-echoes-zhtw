@@ -89,6 +89,30 @@ Then back up the originals and replace them with the `.zhtw.*` outputs. On Steam
 > The dialogue bundle is a Unity **Addressables** asset; if your build enforces a
 > bundle CRC check it may reject a repacked file. Keep the backups so you can revert.
 
+## Taiwan term corrections
+
+The Fanhuaji output is already good, but a few Mainland-China terms slip through
+(e.g. `設置`→`設定`, `窗口`→`視窗`, `後台運行`→`背景執行`) and some battle-state
+names read better as adjectives (`增重`→`沉重`, `受潮`→`潮濕`). `apply_corrections.py`
+applies a curated, editable glossary (`corrections.json`) on top of the converted
+files:
+
+```bash
+python apply_corrections.py /path/to/bansheegz_database.bytes      # -> *.corrected.bytes
+python apply_corrections.py /path/to/packedassets_assets_all.bundle # -> *.corrected.bundle
+```
+
+`corrections.json` has two rule kinds:
+
+- **`substring`** — ordered `[from, to]` pairs applied to every line (put specific
+  phrases first, e.g. `主界面` before `界面`).
+- **`exact`** — replaces a value only when it equals `from` wholesale, for UI
+  labels whose words mean something else in prose (e.g. `保存` = "Save" button,
+  but `保存` = "preserve" in dialogue, which must be left alone).
+
+It is idempotent — re-running adds nothing new — so it doubles as a record of every
+term decision. Add a pair, re-run, done.
+
 ## Quality note
 
 The Taiwan converter makes context-aware choices (e.g. `内存`→`記憶體`, `土豆`→`馬鈴薯`)

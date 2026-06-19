@@ -1,0 +1,23 @@
+{
+  "_comment": "Mainland-China -> Taiwan term corrections applied on top of the Fanhuaji output. 'substring' rules are applied in order to every zh value (more specific phrases first); 'exact' rules replace a value only when it equals 'from' wholesale (used for UI labels whose words mean something else in prose, e.g. 保存=preserve in dialogue).",
+  "substring": [
+    ["主界面", "主畫面"],
+    ["後台運行", "背景執行"],
+    ["自動保存", "自動存檔"],
+    ["這活", "這差事"],
+    ["界面", "介面"],
+    ["退出", "離開"],
+    ["設置", "設定"],
+    ["當前", "目前"],
+    ["質量", "品質"],
+    ["窗口", "視窗"],
+    ["振動", "震動"],
+    ["受潮", "潮濕"],
+    ["增重", "沉重"],
+    ["浸油", "油污"]
+  ],
+  "exact": [
+    ["保存", "存檔"],
+    ["閃白", "畫面閃白"]
+  ]
+}

@@ -10,8 +10,12 @@ Two sources, same row shape:
 
 The first column is a stable `key` that round-trips back to the exact value, so a
 later importer can map edited Chinese straight onto the live files:
-  db:<table>:<entityIndex>          e.g. db:tr_MENU:42
-  dlg:<conversationID>:<entryID>    e.g. dlg:17:3
+  db:<table>:<entityIndex>              e.g. db:tr_MENU:42
+  dlg:<objPathId>:<convID>:<entryID>    e.g. dlg:-8123..:17:3
+
+The dialogue bundle holds 9 separate dialogue MonoBehaviours that reuse the same
+(convID, entryID) numbering for different content, so the object path_id is part
+of the key — (convID, entryID) alone is NOT unique across the bundle.
 
 Run:  python export_subtitles.py            # uses live install defaults
       python export_subtitles.py -o out.csv
@@ -85,7 +89,7 @@ def bundle_rows(bundle_path):
                 if not zh:
                     continue
                 english = f.get("en") or f.get("Dialogue Text", "")
-                yield [f"dlg:{cid}:{de.get('id', '')}", "Dialogue", ctx, english, zh]
+                yield [f"dlg:{o.path_id}:{cid}:{de.get('id', '')}", "Dialogue", ctx, english, zh]
 
 
 def main(db_path, bundle_path, out_path):

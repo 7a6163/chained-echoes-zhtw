@@ -34,7 +34,23 @@ import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
-PROMPT_VERSION = "v2"
+PROMPT_VERSION = "v3"
+
+# Setting + confirmed proper-noun renderings, so polishing stays in-world and the
+# names stay consistent with the curated fixes. Only facts/names verified from the
+# game data are listed here — do not add speculative lore.
+GAME_CONTEXT = (
+    "【遊戲背景】《Chained Echoes》是一款向 16-bit 致敬的奇幻 JRPG。故事發生在瓦蘭蒂斯"
+    "（Valandis）大陸，數個國家（如塔恩、伊斯卡尼亞）長年交戰；世界有飛空艇、名為"
+    "「天穹戰鎧（Sky Armor）」的人形機甲，魔法源自水晶與魔典。語氣是奇幻冒險，"
+    "對白會因角色與情境而有正式、粗俗或詼諧之別，請依 context 與英文語氣拿捏。\n"
+    "【固定譯名】（English → 台灣譯名，務必一致）：\n"
+    "  人物 Glenn 格倫、Lenne 蕾妮、Robb 羅布、Sienna 琪安娜、Kylian 凱廉、Nalkilber 納基伯\n"
+    "  地名 Valandis 瓦蘭蒂斯、Taryn 塔恩、Escanya 伊斯卡尼亞、Tormund 托蒙德、"
+    "He'Kandria 何·坎德利亞、Golgota 果各塔、Kindreld 親族（修道院）、Conothan 科諾森\n"
+    "  名詞 Grand Grimoire 至高魔典、Sky Armor 天穹戰鎧（亦作天鎧）、airship 飛空艇、"
+    "ether 以太、His Holiness 教宗聖下\n"
+)
 DEFAULT_URL = "https://1min.2ac.io/v1/chat/completions"
 DEFAULT_MODEL = "gpt-5.4-mini"
 
@@ -63,6 +79,7 @@ def system_prompt(glossary):
     terms = "\n".join(f"  避免「{a}」，用「{b}」" for a, b in glossary)
     return (
         "你是專業的繁體中文（台灣）電玩在地化譯者，負責 JRPG《Chained Echoes》。\n"
+        + GAME_CONTEXT +
         "這是『翻譯校潤』工作：en 是英文原文（語意的唯一基準），zh 是由簡體機器轉換而來、"
         "尚待校潤的譯文，context 是出處。\n"
         "目標語言是『台灣所使用的正體中文（zh-TW）』，務必讀起來像台灣母語玩家所寫，"

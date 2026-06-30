@@ -34,7 +34,7 @@ import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
-PROMPT_VERSION = "v4"
+PROMPT_VERSION = "v5"
 
 # Setting + confirmed proper-noun renderings, so polishing stays in-world and the
 # names stay consistent with the curated fixes. Only facts/names verified from the
@@ -98,7 +98,8 @@ def system_prompt(glossary):
         "英文平實口語就用平實自然的口語中文，英文正式文雅才考慮較雅的措辭或成語；能用白話講清楚就別套成語，"
         "對白尤其要口語自然、不要文謅謅。（例：平實的「Don't wait too long」→「別拖太久」，不要用「夜長夢多」。）\n"
         "4. 用字採台灣正體（例：軟體/網路/品質/介面/影片/滑鼠，而非 軟件/網絡/質量/界面/視頻/鼠標）。\n"
-        "5. 結構標記必須原封不動、位置不變：[panel=數字]、#開頭的符號、換行數量。其餘標點可改成台灣自然用法（對白引號用「」『』）。\n"
+        "5. 結構標記必須原封不動、位置不變：[panel=數字]、#開頭的符號、換行數量。其餘標點可改成台灣自然用法。"
+        "注意：遊戲字型無法顯示「」『』全形角括號，引號一律用彎引號 “ ”（不要用 「」 或 『』）。\n"
         "6. 譯名一致，遵守上方固定譯名與下列詞彙表。\n"
         "7. 若原譯已是道地台灣中文，原樣輸出即可。\n"
         "8. 只輸出校潤後的譯文本身，不要任何說明。\n"

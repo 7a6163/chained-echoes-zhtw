@@ -51,8 +51,8 @@ GAME_CONTEXT = (
     "  名詞 Grand Grimoire 至高魔典、Sky Armor 天穹戰鎧（亦作天鎧）、airship 飛空艇、"
     "ether 以太、His Holiness 教宗聖下\n"
 )
-DEFAULT_URL = "https://1min.2ac.io/v1/chat/completions"
-DEFAULT_MODEL = "gpt-5.4-mini"
+DEFAULT_URL = "https://api.poe.com/v1/chat/completions"
+DEFAULT_MODEL = "gemini-3.1-flash-lite"
 
 # tokens that must be preserved exactly (multiset) between input and output
 _BRACKET = re.compile(r"\[[^\]]*\]")   # [panel=1], [...]

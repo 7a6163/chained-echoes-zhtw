@@ -11,6 +11,8 @@ version of [Chained Echoes](https://store.steampowered.com/app/1229240/) into
 > 🎮 **Tested against game version 1.4 / 適用遊戲版本 1.4.** Other versions may
 > ship a different data schema; check before applying.
 
+> 📋 **完整流程(改版重做、AI 潤稿、逐句修正、還原)見 [SOP.md](SOP.md)。**
+
 ## Why
 
 The new official build already ships Chinese, but only **Simplified**. Dropping an

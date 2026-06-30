@@ -57,6 +57,12 @@ DEFAULT_MODEL = "gpt-5.4-mini"
 # tokens that must be preserved exactly (multiset) between input and output
 _BRACKET = re.compile(r"\[[^\]]*\]")   # [panel=1], [...]
 _HASHTAG = re.compile(r"#\w+")          # #select, button glyphs
+_CJK = re.compile(r"[㐀-鿿]")  # any Han char -> there is Chinese to polish
+
+
+def has_chinese(s):
+    """Rows with no Han char (PLACEHOLDER, numbers, None(), [] ...) need no polish."""
+    return bool(_CJK.search(s))
 
 
 def markup_tokens(s):
@@ -191,9 +197,13 @@ def main(in_csv, out_csv, url, model, temperature, workers, batch_size,
     cache = load_cache(cache_path)
     lock = threading.Lock()
 
-    # which rows still need work (new or input changed)
+    # which rows still need work (new or input changed); skip rows with no Chinese
     todo = []
+    skipped = 0
     for idx, r in enumerate(rows):
+        if not has_chinese(r["chinese_zhtw"]):
+            skipped += 1
+            continue
         h = row_hash(model, r["context"], r["english"], r["chinese_zhtw"])
         c = cache.get(r["key"])
         if not c or c.get("h") != h:
@@ -201,7 +211,8 @@ def main(in_csv, out_csv, url, model, temperature, workers, batch_size,
     if limit:
         todo = todo[:limit]
     print(f"{len(rows)} rows, {len(todo)} to polish "
-          f"({len(rows) - len(todo)} cached), {workers} workers")
+          f"({len(rows) - len(todo) - skipped} cached, {skipped} no-Chinese skipped), "
+          f"{workers} workers")
 
     batches = [todo[i:i + batch_size] for i in range(0, len(todo), batch_size)]
     kept = [0]  # markup-mismatch -> kept original

@@ -30,12 +30,13 @@ import re
 import sys
 import threading
 import time
+import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 PROMPT_VERSION = "v2"
 DEFAULT_URL = "https://1min.2ac.io/v1/chat/completions"
-DEFAULT_MODEL = "gpt-5.5"
+DEFAULT_MODEL = "gpt-5.4-mini"
 
 # tokens that must be preserved exactly (multiset) between input and output
 _BRACKET = re.compile(r"\[[^\]]*\]")   # [panel=1], [...]
@@ -105,7 +106,9 @@ def call_api(url, key, model, temperature, sys_msg, items):
     }
     req = urllib.request.Request(
         url, data=json.dumps(body).encode("utf-8"),
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
+                 # default urllib UA is often WAF-blocked (403); send a normal one
+                 "User-Agent": "Mozilla/5.0 (polish_csv)"},
     )
     with urllib.request.urlopen(req, timeout=180) as r:
         resp = json.load(r)
@@ -126,6 +129,11 @@ def polish_batch(url, key, model, temperature, sys_msg, batch, retries=3):
             if attempt == retries - 1:
                 return got
             items = [it for it in items if it["id"] not in got]
+        except urllib.error.HTTPError as ex:
+            detail = ex.read().decode("utf-8", "replace")[:500]
+            if attempt == retries - 1:
+                sys.stderr.write(f"  batch failed: HTTP {ex.code} {detail}\n")
+                return {}
         except Exception as ex:  # noqa: BLE001 - network/parse, retry then give up
             if attempt == retries - 1:
                 sys.stderr.write(f"  batch failed: {ex}\n")
